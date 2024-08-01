@@ -7,7 +7,7 @@ class Form extends Model {}
 
 Form.init(
   {
-    firstName: { type: DataTypes.STRING },
+    firstName: { type: DataTypes.STRING, allowNull: false },
     lastName: { type: DataTypes.STRING },
     birthdate: { type: DataTypes.DATE },
     continent: { type: DataTypes.ENUM, values: [...Object.values(Continent)] },

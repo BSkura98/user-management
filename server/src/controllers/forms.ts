@@ -8,18 +8,30 @@ import { RequestError } from "../errors/RequestError";
 import { errorResponse } from "../utils/errorResponse";
 
 export const createForm = async (req: Request, res: Response) => {
-  const form = await createFormService(req);
-  res.status(201).json(form);
+  try {
+    const form = await createFormService(req);
+    res.status(201).json(form);
+  } catch (e) {
+    errorResponse(res, e as RequestError);
+  }
 };
 
 export const getForms = async (req: Request, res: Response) => {
-  const forms = await getFormsService();
-  res.status(200).json(forms);
+  try {
+    const forms = await getFormsService();
+    res.status(200).json(forms);
+  } catch (e) {
+    errorResponse(res, e as RequestError);
+  }
 };
 
 export const getForm = async (req: Request, res: Response) => {
-  const form = await getFormService(Number(req.params.id));
-  res.status(200).json(form);
+  try {
+    const form = await getFormService(Number(req.params.id));
+    res.status(200).json(form);
+  } catch (e) {
+    errorResponse(res, e as RequestError);
+  }
 };
 
 export const deleteForm = async (req: Request, res: Response) => {
