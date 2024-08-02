@@ -7,7 +7,7 @@ dotenv.config();
 
 sequelize.sync().then(() => console.log("Database is ready"));
 
-const PORT = 3000;
+const PORT = 5000;
 
 const app = createApp();
 
