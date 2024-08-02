@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "@mui/material/Button";
 
-import AddUserModal from "./AddUserDialog";
+import AddUserModal from "./components/AddUserDialog";
 
 function App() {
   const [open, setOpen] = useState(true);

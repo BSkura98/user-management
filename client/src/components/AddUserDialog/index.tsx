@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 
 import { Continent } from "./continents";
 import { StyledDialog } from "./styled";
+import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
 
 interface Props {
   open: boolean;
@@ -23,6 +24,8 @@ interface Props {
 }
 
 export default function AddUserDialog({ open, onClose }: Props) {
+  const { data } = useGetContinentsQuery();
+
   const [continent, setContinent] = useState<Continent | undefined>(undefined);
 
   return (
@@ -51,8 +54,10 @@ export default function AddUserDialog({ open, onClose }: Props) {
             }}
           >
             <MenuItem value={undefined}>-</MenuItem>
-            {Object.entries(Continent).map(([key, value]) => (
-              <MenuItem value={key}>{value}</MenuItem>
+            {data?.data?.map((continent: string) => (
+              <MenuItem value={continent} key={continent}>
+                {continent}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
