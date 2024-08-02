@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,11 +14,11 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
+import dayjs, { Dayjs } from "dayjs";
 
 import { StyledDialog } from "./styled";
 import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
 import { useCreateUserMutation } from "../../hooks/useCreateUserMutation";
-import { Dayjs } from "dayjs";
 
 interface Props {
   open: boolean;
@@ -34,13 +34,34 @@ export default function AddUserDialog({ open, onClose }: Props) {
   const [lastName, setLastName] = useState<string>("");
   const [birthdate, setBirthdate] = useState<Dayjs | null>(null);
 
+  const isBirthdateInFuture = useMemo(
+    () => dayjs(birthdate).isAfter(dayjs()),
+    [birthdate]
+  );
+
+  const [firstNameError, setFirstNameError] = useState<string>("");
+  const [lastNameError, setLastNameError] = useState<string>("");
+
   useEffect(() => {
     if (createUserMutation.isSuccess) {
-      toast.success("User successfully added!");
+      toast.success("Użytkownik został pomyślnie dodany");
 
       onClose();
     }
   }, [createUserMutation.isSuccess]);
+
+  const isDataValid = () => {
+    if (firstName.length === 0) {
+      setFirstNameError("To pole jest wymagane");
+      return false;
+    }
+    if (continent === "Europa" && (!lastName || lastName.length < 2)) {
+      setLastNameError("Nie spełnione kryteria");
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <StyledDialog
@@ -50,12 +71,14 @@ export default function AddUserDialog({ open, onClose }: Props) {
         component: "form",
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          createUserMutation.mutate({
-            continent,
-            firstName,
-            lastName,
-            birthdate: birthdate?.format("YYYY-MM-DD"),
-          });
+          if (isDataValid()) {
+            createUserMutation.mutate({
+              continent,
+              firstName,
+              lastName,
+              birthdate: birthdate?.format("YYYY-MM-DD"),
+            });
+          }
         },
       }}
     >
@@ -81,7 +104,6 @@ export default function AddUserDialog({ open, onClose }: Props) {
           </Select>
         </FormControl>
         <TextField
-          required
           margin="dense"
           id="name"
           name="first-name"
@@ -90,7 +112,12 @@ export default function AddUserDialog({ open, onClose }: Props) {
           fullWidth
           variant="outlined"
           value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          onChange={(e) => {
+            setFirstNameError("");
+            setFirstName(e.target.value);
+          }}
+          error={Boolean(firstNameError)}
+          helperText={firstNameError}
         />
         <TextField
           margin="dense"
@@ -101,7 +128,12 @@ export default function AddUserDialog({ open, onClose }: Props) {
           fullWidth
           variant="outlined"
           value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          onChange={(e) => {
+            setLastNameError("");
+            setLastName(e.target.value);
+          }}
+          error={Boolean(lastNameError)}
+          helperText={lastNameError}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
@@ -115,7 +147,9 @@ export default function AddUserDialog({ open, onClose }: Props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Zamknij</Button>
-        <Button type="submit">Zapisz</Button>
+        <Button type="submit" disabled={isBirthdateInFuture}>
+          Wyślij
+        </Button>
       </DialogActions>
     </StyledDialog>
   );
