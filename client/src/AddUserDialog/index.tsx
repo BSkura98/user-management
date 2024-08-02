@@ -33,10 +33,6 @@ export default function AddUserDialog({ open, onClose }: Props) {
         component: "form",
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
-          const email = formJson.email;
-          console.log(email);
           onClose();
         },
       }}
@@ -61,7 +57,6 @@ export default function AddUserDialog({ open, onClose }: Props) {
           </Select>
         </FormControl>
         <TextField
-          autoFocus
           required
           margin="dense"
           id="name"
@@ -72,9 +67,8 @@ export default function AddUserDialog({ open, onClose }: Props) {
           variant="outlined"
         />
         <TextField
-          autoFocus
           margin="dense"
-          id="name"
+          id="last-name"
           name="last-name"
           label="Nazwisko"
           type="text"
