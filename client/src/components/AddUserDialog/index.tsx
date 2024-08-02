@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
@@ -13,10 +13,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import { toast } from "react-toastify";
 
-import { Continent } from "./continents";
 import { StyledDialog } from "./styled";
 import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
+import { useCreateUserMutation } from "../../hooks/useCreateUserMutation";
+import { Dayjs } from "dayjs";
 
 interface Props {
   open: boolean;
@@ -25,8 +27,20 @@ interface Props {
 
 export default function AddUserDialog({ open, onClose }: Props) {
   const { data } = useGetContinentsQuery();
+  const createUserMutation = useCreateUserMutation();
 
-  const [continent, setContinent] = useState<Continent | undefined>(undefined);
+  const [continent, setContinent] = useState<string | undefined>(undefined);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [birthdate, setBirthdate] = useState<Dayjs | null>(null);
+
+  useEffect(() => {
+    if (createUserMutation.isSuccess) {
+      toast.success("User successfully added!");
+
+      onClose();
+    }
+  }, [createUserMutation.isSuccess]);
 
   return (
     <StyledDialog
@@ -36,7 +50,12 @@ export default function AddUserDialog({ open, onClose }: Props) {
         component: "form",
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
-          onClose();
+          createUserMutation.mutate({
+            continent,
+            firstName,
+            lastName,
+            birthdate: birthdate?.format("YYYY-MM-DD"),
+          });
         },
       }}
     >
@@ -50,7 +69,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
             value={continent as string}
             label="Kontynent"
             onChange={(event: SelectChangeEvent) => {
-              setContinent(event.target.value as Continent);
+              setContinent(event.target.value);
             }}
           >
             <MenuItem value={undefined}>-</MenuItem>
@@ -70,6 +89,8 @@ export default function AddUserDialog({ open, onClose }: Props) {
           type="text"
           fullWidth
           variant="outlined"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
         />
         <TextField
           margin="dense"
@@ -79,10 +100,16 @@ export default function AddUserDialog({ open, onClose }: Props) {
           type="text"
           fullWidth
           variant="outlined"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
-            <DatePicker label="Data urodzenia" />
+            <DatePicker
+              label="Data urodzenia"
+              value={birthdate}
+              onChange={(value) => setBirthdate(value)}
+            />
           </DemoContainer>
         </LocalizationProvider>
       </DialogContent>
