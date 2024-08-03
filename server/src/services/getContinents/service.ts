@@ -1,4 +1,4 @@
-import { Continent } from "./continents";
+import { Continent } from "../../types/continents";
 
 export const getContinentsService = () => {
   return Object.values(Continent);

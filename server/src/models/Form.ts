@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 
 import sequelize from "../database";
-import { Continent } from "../services/getContinents/continents";
+import { Continent } from "../types/continents";
 
 class Form extends Model {}
 
