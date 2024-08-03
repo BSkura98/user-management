@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
@@ -19,6 +19,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { StyledDialog } from "./styled";
 import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
 import { useCreateUserMutation } from "../../hooks/useCreateUserMutation";
+import { UserBirthdateContext, UserBirthdateContextType } from "../../App";
 
 interface Props {
   open: boolean;
@@ -26,6 +27,10 @@ interface Props {
 }
 
 export default function AddUserDialog({ open, onClose }: Props) {
+  const { setUserBirthdate } = useContext(
+    UserBirthdateContext
+  ) as UserBirthdateContextType;
+
   const { data } = useGetContinentsQuery();
   const createUserMutation = useCreateUserMutation();
 
@@ -48,6 +53,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
 
       onClose();
     }
+    // eslint-disable-next-line
   }, [createUserMutation.isSuccess]);
 
   const isDataValid = () => {
@@ -72,6 +78,10 @@ export default function AddUserDialog({ open, onClose }: Props) {
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           if (isDataValid()) {
+            if (birthdate) {
+              localStorage.setItem("birthdate", birthdate.format("YYYY-MM-DD"));
+            }
+
             createUserMutation.mutate({
               continent,
               firstName,
@@ -140,13 +150,25 @@ export default function AddUserDialog({ open, onClose }: Props) {
             <DatePicker
               label="Data urodzenia"
               value={birthdate}
-              onChange={(value) => setBirthdate(value)}
+              onChange={(value) => {
+                setBirthdate(value);
+                if (value) {
+                  setUserBirthdate(value.format("YYYY-MM-DD"));
+                }
+              }}
             />
           </DemoContainer>
         </LocalizationProvider>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Zamknij</Button>
+        <Button
+          onClick={() => {
+            setUserBirthdate(localStorage.getItem("birthdate"));
+            onClose();
+          }}
+        >
+          Zamknij
+        </Button>
         <Button type="submit" disabled={isBirthdateInFuture}>
           Wyślij
         </Button>
