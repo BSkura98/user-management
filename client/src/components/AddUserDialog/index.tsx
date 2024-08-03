@@ -15,6 +15,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
 import dayjs, { Dayjs } from "dayjs";
+import { plPL } from "@mui/x-date-pickers/locales";
+import "dayjs/locale/pl";
 
 import { StyledDialog } from "./styled";
 import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
@@ -106,7 +108,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
             }}
           >
             <MenuItem value={undefined}>-</MenuItem>
-            {data?.data?.map((continent: string) => (
+            {data?.map((continent: string) => (
               <MenuItem value={continent} key={continent}>
                 {continent}
               </MenuItem>
@@ -145,7 +147,13 @@ export default function AddUserDialog({ open, onClose }: Props) {
           error={Boolean(lastNameError)}
           helperText={lastNameError}
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale="pl"
+          localeText={
+            plPL.components.MuiLocalizationProvider.defaultProps.localeText
+          }
+        >
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               label="Data urodzenia"

@@ -6,7 +6,8 @@ export const useGetUserQuery = (id: number) => {
   return useQuery({
     queryKey: [`users/${id}`],
     queryFn: async () => {
-      return await apiClient.get(`/forms/${id}`);
+      const response = await apiClient.get(`/forms/${id}`);
+      return response.data;
     },
   });
 };

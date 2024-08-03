@@ -14,7 +14,8 @@ import { Form } from "../../models/Form";
 import { useGetUsersQuery } from "../../hooks/useGetUsersQuery";
 import DeleteUserDialog from "../DeleteUserDialog";
 import UserDetailsDialog from "../UserDetailsDialog";
-import { StyledTableRow } from "./styled";
+import { NoUsersInformation, StyledTableRow } from "./styled";
+import { Typography } from "@mui/material";
 
 export default function UsersTable() {
   const { data } = useGetUsersQuery();
@@ -46,7 +47,12 @@ export default function UsersTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.data.map((user: Form) => (
+            {data?.length === 0 && (
+              <NoUsersInformation variant="body1">
+                Brak użytkowników
+              </NoUsersInformation>
+            )}
+            {data?.map((user: Form) => (
               <StyledTableRow
                 key={user.firstName}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

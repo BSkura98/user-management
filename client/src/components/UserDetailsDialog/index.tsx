@@ -28,21 +28,21 @@ export default function UserDetailsDialog({ userId, onClose }: Props) {
       <DialogContent>
         <DialogContentText id="user-details-dialog-description">
           <b>Id</b>
-          <p>{data?.data.id}</p>
+          <p>{data?.id}</p>
           <b>Imię</b>
-          <p>{data?.data.firstName}</p>
+          <p>{data?.firstName}</p>
           <b>Nazwisko</b>
-          <p>{data?.data.lastName || "-"}</p>
+          <p>{data?.lastName || "-"}</p>
           <b>Kontynent</b>
-          <p>{data?.data.continent || "-"}</p>
+          <p>{data?.continent || "-"}</p>
           <b>Data urodzenia</b>
           <p>
-            {data?.data.birthdate
-              ? dayjs(data?.data.birthdate).format("DD/MM/YYYY")
+            {data?.birthdate
+              ? dayjs(data?.birthdate).format("DD/MM/YYYY")
               : "-"}
           </p>
           <b>Data utworzenia użytkownika</b>
-          <p>{dayjs(data?.data.createdAt).format("DD/MM/YYYY HH:mm:ss")}</p>
+          <p>{dayjs(data?.createdAt).format("DD/MM/YYYY HH:mm:ss")}</p>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
