@@ -56,7 +56,7 @@ export default function UsersTable() {
             )}
             {data?.map((user: Form) => (
               <StyledTableRow
-                key={user.firstName}
+                key={user.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 onClick={() => setUserDetailsId(user.id)}
                 hover
