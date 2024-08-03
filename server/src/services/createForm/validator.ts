@@ -1,7 +1,7 @@
 import { Validator, Schema } from "jsonschema";
 
 import { BadRequestError } from "../../errors/BadRequestError";
-import { Continent } from "../getContinents/continents";
+import { Continent } from "../../types/continents";
 import { isFuture } from "date-fns";
 
 export const validate = (body: any) => {
