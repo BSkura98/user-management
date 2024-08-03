@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import apiClient from "../http-common";
-import { Form } from "../models/Form";
 
-export const useCreateUserMutation = () => {
+export const useDeleteUserMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (form: Omit<Form, "id">) => {
-      const response = await apiClient.post("/forms", form);
+    mutationFn: async (id: number) => {
+      const response = await apiClient.delete(`/forms/${id}`);
       return response.data;
     },
     onSuccess: () => {
