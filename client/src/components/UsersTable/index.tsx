@@ -14,11 +14,10 @@ import { Form } from "../../models/Form";
 import { useGetUsersQuery } from "../../hooks/useGetUsersQuery";
 import DeleteUserDialog from "../DeleteUserDialog";
 import UserDetailsDialog from "../UserDetailsDialog";
-import { NoUsersInformation, StyledTableRow } from "./styled";
-import { Typography } from "@mui/material";
+import { TableInformation, StyledTableRow } from "./styled";
 
 export default function UsersTable() {
-  const { data } = useGetUsersQuery();
+  const { data, isLoading } = useGetUsersQuery();
 
   const [userToDeleteId, setUserToDeleteId] = useState<number | null>(null);
   const [userDetailsId, setUserDetailsId] = useState<number | null>(null);
@@ -47,10 +46,13 @@ export default function UsersTable() {
             </TableRow>
           </TableHead>
           <TableBody>
+            {isLoading && (
+              <TableInformation variant="body1">Ładowanie...</TableInformation>
+            )}
             {data?.length === 0 && (
-              <NoUsersInformation variant="body1">
+              <TableInformation variant="body1">
                 Brak użytkowników
-              </NoUsersInformation>
+              </TableInformation>
             )}
             {data?.map((user: Form) => (
               <StyledTableRow

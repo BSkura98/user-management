@@ -8,7 +8,7 @@ export const StyledTableRow = styled(TableRow)`
   }
 `;
 
-export const NoUsersInformation = styled(Typography)`
+export const TableInformation = styled(Typography)`
   && {
     width: 10rem;
     margin: 1rem;
