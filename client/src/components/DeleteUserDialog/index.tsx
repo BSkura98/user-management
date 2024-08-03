@@ -23,6 +23,7 @@ export default function DeleteUserDialog({ userId, onClose }: Props) {
 
       onClose();
     }
+    // eslint-disable-next-line
   }, [deleteUserMutation.isSuccess]);
 
   const deleteUser = () => {
