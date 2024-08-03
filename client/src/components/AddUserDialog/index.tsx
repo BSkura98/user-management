@@ -58,6 +58,13 @@ export default function AddUserDialog({ open, onClose }: Props) {
     // eslint-disable-next-line
   }, [createUserMutation.isSuccess]);
 
+  useEffect(() => {
+    if (createUserMutation.isError) {
+      toast.error("Nastąpił problem podczas dodawania użytkownika");
+    }
+    // eslint-disable-next-line
+  }, [createUserMutation.isError]);
+
   const isDataValid = () => {
     if (firstName.length === 0) {
       setFirstNameError("To pole jest wymagane");

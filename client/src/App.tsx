@@ -21,15 +21,7 @@ export const UserBirthdateContext =
 
 function App() {
   const [userBirthdate, setUserBirthdate] = useState<string | null>(null);
-  const [open, setOpen] = useState(true);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [addUserDialogOpen, setAddUserDialogOpen] = useState(true);
 
   useEffect(() => {
     setUserBirthdate(localStorage.getItem("birthdate"));
@@ -46,13 +38,19 @@ function App() {
             hideProgressBar
             style={{ width: "30rem" }}
           />
-          <AddUserModal open={open} onClose={handleClose} />
+          <AddUserModal
+            open={addUserDialogOpen}
+            onClose={() => setAddUserDialogOpen(false)}
+          />
           <PageContainer>
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <Typography variant="h6" gutterBottom>
                 Użytkownicy
               </Typography>
-              <Button variant="contained" onClick={handleClickOpen}>
+              <Button
+                variant="contained"
+                onClick={() => setAddUserDialogOpen(true)}
+              >
                 Dodaj
               </Button>
             </Stack>

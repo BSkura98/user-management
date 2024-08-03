@@ -17,17 +17,19 @@ import UserDetailsDialog from "../UserDetailsDialog";
 import { TableInformation, StyledTableRow } from "./styled";
 
 export default function UsersTable() {
-  const { data, isLoading } = useGetUsersQuery();
+  const { data, isLoading, isError } = useGetUsersQuery();
 
   const [userToDeleteId, setUserToDeleteId] = useState<number | null>(null);
   const [userDetailsId, setUserDetailsId] = useState<number | null>(null);
 
   return (
     <>
-      <DeleteUserDialog
-        userId={userToDeleteId}
-        onClose={() => setUserToDeleteId(null)}
-      />
+      {userToDeleteId && (
+        <DeleteUserDialog
+          userId={userToDeleteId}
+          onClose={() => setUserToDeleteId(null)}
+        />
+      )}
       {userDetailsId && (
         <UserDetailsDialog
           userId={userDetailsId}
@@ -46,6 +48,11 @@ export default function UsersTable() {
             </TableRow>
           </TableHead>
           <TableBody>
+            {isError && (
+              <TableInformation variant="body1">
+                Nastąpił problem podczas ładowania
+              </TableInformation>
+            )}
             {isLoading && (
               <TableInformation variant="body1">Ładowanie...</TableInformation>
             )}
