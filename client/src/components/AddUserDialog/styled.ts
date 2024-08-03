@@ -5,4 +5,8 @@ export const StyledDialog = styled(Dialog)`
   .MuiDialogContent-root {
     max-width: 25rem;
   }
+
+  .MuiFormControl-root {
+    width: 100%;
+  }
 `;

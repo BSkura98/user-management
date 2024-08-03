@@ -6,7 +6,8 @@ export const useGetContinentsQuery = () => {
   return useQuery({
     queryKey: ["get-continents"],
     queryFn: async () => {
-      return await apiClient.get("/continents");
+      const response = await apiClient.get("/continents");
+      return response.data;
     },
   });
 };

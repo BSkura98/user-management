@@ -14,20 +14,22 @@ import { Form } from "../../models/Form";
 import { useGetUsersQuery } from "../../hooks/useGetUsersQuery";
 import DeleteUserDialog from "../DeleteUserDialog";
 import UserDetailsDialog from "../UserDetailsDialog";
-import { StyledTableRow } from "./styled";
+import { TableInformation, StyledTableRow } from "./styled";
 
 export default function UsersTable() {
-  const { data } = useGetUsersQuery();
+  const { data, isLoading, isError } = useGetUsersQuery();
 
   const [userToDeleteId, setUserToDeleteId] = useState<number | null>(null);
   const [userDetailsId, setUserDetailsId] = useState<number | null>(null);
 
   return (
     <>
-      <DeleteUserDialog
-        userId={userToDeleteId}
-        onClose={() => setUserToDeleteId(null)}
-      />
+      {userToDeleteId && (
+        <DeleteUserDialog
+          userId={userToDeleteId}
+          onClose={() => setUserToDeleteId(null)}
+        />
+      )}
       {userDetailsId && (
         <UserDetailsDialog
           userId={userDetailsId}
@@ -46,9 +48,22 @@ export default function UsersTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.data.map((user: Form) => (
+            {isError && (
+              <TableInformation variant="body1">
+                Nastąpił problem podczas ładowania
+              </TableInformation>
+            )}
+            {isLoading && (
+              <TableInformation variant="body1">Ładowanie...</TableInformation>
+            )}
+            {data?.length === 0 && (
+              <TableInformation variant="body1">
+                Brak użytkowników
+              </TableInformation>
+            )}
+            {data?.map((user: Form) => (
               <StyledTableRow
-                key={user.firstName}
+                key={user.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 onClick={() => setUserDetailsId(user.id)}
                 hover

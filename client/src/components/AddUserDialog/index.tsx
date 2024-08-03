@@ -15,6 +15,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { toast } from "react-toastify";
 import dayjs, { Dayjs } from "dayjs";
+import { plPL } from "@mui/x-date-pickers/locales";
+import "dayjs/locale/pl";
 
 import { StyledDialog } from "./styled";
 import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
@@ -51,10 +53,17 @@ export default function AddUserDialog({ open, onClose }: Props) {
     if (createUserMutation.isSuccess) {
       toast.success("Użytkownik został pomyślnie dodany");
 
-      onClose();
+      handleClose();
     }
     // eslint-disable-next-line
   }, [createUserMutation.isSuccess]);
+
+  useEffect(() => {
+    if (createUserMutation.isError) {
+      toast.error("Nastąpił problem podczas dodawania użytkownika");
+    }
+    // eslint-disable-next-line
+  }, [createUserMutation.isError]);
 
   const isDataValid = () => {
     if (firstName.length === 0) {
@@ -69,10 +78,18 @@ export default function AddUserDialog({ open, onClose }: Props) {
     return true;
   };
 
+  const handleClose = () => {
+    setContinent(undefined);
+    setFirstName("");
+    setLastName("");
+    setBirthdate(null);
+    onClose();
+  };
+
   return (
     <StyledDialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       PaperProps={{
         component: "form",
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
@@ -106,7 +123,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
             }}
           >
             <MenuItem value={undefined}>-</MenuItem>
-            {data?.data?.map((continent: string) => (
+            {data?.map((continent: string) => (
               <MenuItem value={continent} key={continent}>
                 {continent}
               </MenuItem>
@@ -145,7 +162,13 @@ export default function AddUserDialog({ open, onClose }: Props) {
           error={Boolean(lastNameError)}
           helperText={lastNameError}
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale="pl"
+          localeText={
+            plPL.components.MuiLocalizationProvider.defaultProps.localeText
+          }
+        >
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               label="Data urodzenia"
@@ -164,7 +187,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
         <Button
           onClick={() => {
             setUserBirthdate(localStorage.getItem("birthdate"));
-            onClose();
+            handleClose();
           }}
         >
           Zamknij
