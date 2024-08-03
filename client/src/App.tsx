@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import AddUserModal from "./components/AddUserDialog";
 import UsersTable from "./components/UsersTable";
 import { PageContainer } from "./styled";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 
 function App() {
   const [open, setOpen] = useState(true);
