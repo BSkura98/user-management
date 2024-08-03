@@ -22,6 +22,7 @@ import { StyledDialog } from "./styled";
 import { useGetContinentsQuery } from "../../hooks/useGetContinentsQuery";
 import { useCreateUserMutation } from "../../hooks/useCreateUserMutation";
 import { UserBirthdateContext, UserBirthdateContextType } from "../../App";
+import FormHelperText from "@mui/material/FormHelperText";
 
 interface Props {
   open: boolean;
@@ -47,7 +48,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
   );
 
   const [firstNameError, setFirstNameError] = useState<string>("");
-  const [lastNameError, setLastNameError] = useState<string>("");
+  const [continentError, setContinentError] = useState<string>("");
 
   useEffect(() => {
     if (createUserMutation.isSuccess) {
@@ -71,7 +72,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
       return false;
     }
     if (continent === "Europa" && (!lastName || lastName.length < 2)) {
-      setLastNameError("Nie spełnione kryteria");
+      setContinentError("Nie spełnione kryteria");
       return false;
     }
 
@@ -111,7 +112,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
     >
       <DialogTitle>Dodaj użytkownika</DialogTitle>
       <DialogContent>
-        <FormControl fullWidth margin="dense">
+        <FormControl fullWidth margin="dense" error={Boolean(continentError)}>
           <InputLabel id="continent-label">Kontynent</InputLabel>
           <Select
             labelId="continent-label"
@@ -129,6 +130,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
               </MenuItem>
             ))}
           </Select>
+          {continentError && <FormHelperText>{continentError}</FormHelperText>}
         </FormControl>
         <TextField
           margin="dense"
@@ -156,11 +158,9 @@ export default function AddUserDialog({ open, onClose }: Props) {
           variant="outlined"
           value={lastName}
           onChange={(e) => {
-            setLastNameError("");
+            setContinentError("");
             setLastName(e.target.value);
           }}
-          error={Boolean(lastNameError)}
-          helperText={lastNameError}
         />
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
