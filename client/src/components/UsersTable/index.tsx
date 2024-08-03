@@ -65,7 +65,6 @@ export default function UsersTable() {
                   <IconButton
                     aria-label="delete"
                     onClick={(e) => {
-                      // e.preventDefault();
                       e.stopPropagation();
                       setUserToDeleteId(user.id);
                     }}
