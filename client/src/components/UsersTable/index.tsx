@@ -19,14 +19,14 @@ import { StyledTableRow } from "./styled";
 export default function UsersTable() {
   const { data } = useGetUsersQuery();
 
-  const [userToDelete, setUserToDelete] = useState<number | null>(null);
+  const [userToDeleteId, setUserToDeleteId] = useState<number | null>(null);
   const [userDetailsId, setUserDetailsId] = useState<number | null>(null);
 
   return (
     <>
       <DeleteUserDialog
-        userId={userToDelete}
-        onClose={() => setUserToDelete(null)}
+        userId={userToDeleteId}
+        onClose={() => setUserToDeleteId(null)}
       />
       {userDetailsId && (
         <UserDetailsDialog
@@ -67,7 +67,7 @@ export default function UsersTable() {
                     onClick={(e) => {
                       // e.preventDefault();
                       e.stopPropagation();
-                      setUserToDelete(user.id);
+                      setUserToDeleteId(user.id);
                     }}
                   >
                     <DeleteIcon />
