@@ -53,7 +53,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
     if (createUserMutation.isSuccess) {
       toast.success("Użytkownik został pomyślnie dodany");
 
-      onClose();
+      handleClose();
     }
     // eslint-disable-next-line
   }, [createUserMutation.isSuccess]);
@@ -71,10 +71,18 @@ export default function AddUserDialog({ open, onClose }: Props) {
     return true;
   };
 
+  const handleClose = () => {
+    setContinent(undefined);
+    setFirstName("");
+    setLastName("");
+    setBirthdate(null);
+    onClose();
+  };
+
   return (
     <StyledDialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       PaperProps={{
         component: "form",
         onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
@@ -172,7 +180,7 @@ export default function AddUserDialog({ open, onClose }: Props) {
         <Button
           onClick={() => {
             setUserBirthdate(localStorage.getItem("birthdate"));
-            onClose();
+            handleClose();
           }}
         >
           Zamknij
