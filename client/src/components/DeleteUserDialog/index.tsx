@@ -1,4 +1,5 @@
-import * as React from "react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,8 +8,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import { useDeleteUserMutation } from "../../hooks/useDeleteUserMutation";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
 
 interface Props {
   userId: number | null;
@@ -34,12 +33,12 @@ export default function DeleteUserDialog({ userId, onClose }: Props) {
     <Dialog
       open={userId !== null}
       onClose={onClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      aria-labelledby="delete-user-dialog-title"
+      aria-describedby="delete-user-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Usuń użytkownika</DialogTitle>
+      <DialogTitle id="delete-user-dialog-title">Usuń użytkownika</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id="delete-user-dialog-description">
           Czy na pewno chcesz usunąć tego użytkownika?
         </DialogContentText>
       </DialogContent>
